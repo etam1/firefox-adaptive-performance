@@ -1,0 +1,10 @@
+.navbar {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}

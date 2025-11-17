@@ -1,0 +1,11 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 422px;
+  height: 555px;
+  max-width: 422px;
+  max-height: 555px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
