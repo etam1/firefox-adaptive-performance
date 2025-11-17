@@ -1,6 +1,6 @@
 # Firefox Adaptive Performance Extension - Design Doc
 
-**Last Updated:** 2024-12-19  
+**Last Updated:** 2024-12-19 (Latest: Navigation, CSS Modules, Layout fixes)  
 **Status:** 🟡 In Development
 
 ---
@@ -31,9 +31,21 @@ firefox-adaptive-performance-extension/
 ├── manifest.json          # Extension manifest (Firefox config)
 ├── popup.html             # Entry point HTML (loads React app)
 ├── src/
-│   ├── App.jsx            # Main React component (popup UI)
+│   ├── App.jsx            # Main React component (wraps NavBar)
+│   ├── App.module.css     # App styles (CSS modules)
+│   ├── NavBar.jsx         # Navigation component with page routing
+│   ├── NavBar.module.css  # NavBar styles (CSS modules)
 │   ├── main.jsx           # React entry point
-│   └── ...
+│   └── pages/
+│       ├── home/
+│       │   ├── Home.jsx
+│       │   └── Home.module.css
+│       ├── tabs/
+│       │   ├── Tabs.jsx
+│       │   └── Tabs.module.css
+│       └── settings/
+│           ├── Settings.jsx
+│           └── Settings.module.css
 ├── dist/                  # Built extension (after npm run build)
 └── copy-manifest.js       # Build script helper
 ```
@@ -65,13 +77,32 @@ firefox-adaptive-performance-extension/
    - Date: 2024-12-19
 
 4. **Popup Structure:** Single HTML file (`popup.html`) that loads React app
+
    - Reason: Standard Firefox extension pattern
+   - Date: 2024-12-19
+
+5. **Styling Approach:** CSS Modules for all components
+
+   - Reason: Scoped styles, type-safe, maintainable
+   - Date: 2024-12-19
+
+6. **Navigation Architecture:** NavBar component manages page state and routing
+
+   - Reason: Self-contained navigation, simpler App component
+   - Date: 2024-12-19
+
+7. **Page Organization:** Each page in its own folder (home/, tabs/, settings/)
+
+   - Reason: Better organization, easier to scale
+   - Date: 2024-12-19
+
+8. **Fixed Dimensions:** 422px × 555px popup size
+   - Reason: Consistent UI, prevents layout shifts
    - Date: 2024-12-19
 
 #### 🔄 Pending Decisions
 
-- [ ] Choose state management solution (if needed)
-- [ ] Decide on styling approach (CSS modules, styled-components, etc.)
+- [ ] Choose state management solution (if needed beyond useState)
 - [ ] Determine storage mechanism (localStorage, browser.storage, etc.)
 - [ ] Plan background script architecture (if needed)
 
@@ -110,6 +141,13 @@ firefox-adaptive-performance-extension/
 - [x] Create popup.html entry point
 - [x] Set up build pipeline
 - [x] Create basic popup UI
+- [x] Implement NavBar component with navigation
+- [x] Create three page components (Home, Tabs, Settings)
+- [x] Organize pages into separate folders
+- [x] Convert all styling to CSS modules
+- [x] Set fixed popup dimensions (422px × 555px)
+- [x] Fix horizontal scrolling issues
+- [x] Implement page routing/switching
 
 ---
 
@@ -117,16 +155,37 @@ firefox-adaptive-performance-extension/
 
 ### Current State
 
-- **Popup Size:** 350px width, minimum 200px height
-- **Styling:** Inline styles (temporary)
-- **Components:** Single App component with counter demo
+- **Popup Size:** Fixed 422px × 555px
+- **Styling:** CSS Modules throughout all components
+- **Components:**
+  - `App.jsx` - Main wrapper component
+  - `NavBar.jsx` - Navigation bar with three buttons (Home, Tabs, Settings)
+  - `Home.jsx` - Home page component
+  - `Tabs.jsx` - Tabs management page component
+  - `Settings.jsx` - Settings page component
+- **Navigation:** Client-side routing managed by NavBar component state
+- **Layout:** Flexbox-based layout with fixed dimensions
+- **Overflow:** Horizontal scrolling disabled, vertical scrolling enabled for content
+
+### Component Structure
+
+```
+App
+└── NavBar
+    ├── Navigation Buttons (Home, Tabs, Settings)
+    └── Content Area
+        ├── Home (when active)
+        ├── Tabs (when active)
+        └── Settings (when active)
+```
 
 ### Planned Features
 
 - [ ] Design system / component library
 - [ ] Dark/light theme support
-- [ ] Responsive layout
-- [ ] Accessibility improvements
+- [ ] Improve NavBar button styling
+- [ ] Accessibility improvements (ARIA labels, keyboard navigation)
+- [ ] Loading states for async operations
 
 ---
 
@@ -182,7 +241,11 @@ firefox-adaptive-performance-extension/
 
 ## 🐛 Known Issues
 
-_None yet - add issues as they arise_
+- ✅ **Fixed:** Horizontal scrolling - Resolved by adding `overflow-x: hidden`, `box-sizing: border-box`, and proper width constraints
+- ✅ **Fixed:** Missing `.content` class in NavBar - Added to NavBar.module.css
+- ✅ **Fixed:** Width mismatch between popup.html and App - Updated to consistent 422px
+
+_No current issues - add new issues as they arise_
 
 ---
 
@@ -237,11 +300,36 @@ npm run build
 
 ### 2024-12-19
 
+#### Initial Setup
+
 - ✅ Initial project setup
 - ✅ React + Vite configuration
 - ✅ Firefox extension manifest
 - ✅ Basic popup UI with counter demo
 - ✅ Build pipeline setup
+
+#### Navigation & Structure
+
+- ✅ Created NavBar component with page switching functionality
+- ✅ Implemented three pages: Home, Tabs, Settings
+- ✅ Organized pages into separate folders (home/, tabs/, settings/)
+- ✅ NavBar manages its own state for page routing
+
+#### Styling & Layout
+
+- ✅ Converted all styling to CSS Modules
+- ✅ Set fixed popup dimensions: 422px × 555px
+- ✅ Fixed horizontal scrolling issues
+- ✅ Added proper overflow controls throughout
+- ✅ Implemented `box-sizing: border-box` for consistent sizing
+- ✅ Added word-wrap for long text content
+
+#### Technical Improvements
+
+- ✅ Updated popup.html to match app dimensions
+- ✅ Added proper CSS constraints to prevent overflow
+- ✅ Improved flexbox layout for NavBar buttons
+- ✅ Added content area with proper scrolling behavior
 
 ---
 
