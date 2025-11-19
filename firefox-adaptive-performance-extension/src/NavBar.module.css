@@ -1,10 +1,57 @@
 .navbar {
+  display: flex;
+  width: 422px;
+  height: 58px;
+  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+
+  .logo {
+    width: 30px;
+    height: 35px;
+  }
+
+  .navButtons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .navButton {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+  }
+
+  .navButton img {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+  
+  .navButton:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .navButton.active {
+    background-color: #e8f4fd;
+  }
+  
+  .navButton.active:hover {
+    background-color: #d0e9fb;
+  }
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
   width: 100%;
   max-width: 100%;
-  display: flex;
-  gap: 8px;
-  padding: 10px;
-  background-color: #f0f0f0;
   box-sizing: border-box;
-  flex-shrink: 0;
 }
