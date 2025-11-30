@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+.popUpBase {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  text-align: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.popUpHigh {
+  border: 2px solid red;
+}
+
+.popUpMedium {
+  border: 2px solid orange;
+}
+
+.popUpLow {
+  border: 2px solid green;
+}
+
+.popUpHigh:hover {
+  background: #ffe5e5;
+}
+
+.popUpMedium:hover {
+  background: #fff6dd;
+}
+
+.popUpLow:hover {
+  background: #e4ffea;
+}
+
+.popoverContent {
+  display: flex;
+  font-family: Inter;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.popoverContent h1 {
+  color: #000;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.popoverContent p {
+  color: #000;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.popoverContent ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.popoverContent li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #404040;
+  font-family: "Inter", "sans-serif";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.levelHigh {
+  color: red;
+}
+
+.levlMedium {
+  color: orange;
+}
+
+.levlLow {
+  color: green;
+}
+
+.contentHigh {
+  border-color: red;
+}
+
+.contentMedium {
+  border-color: orange;
+}
+
+.contentLow {
+  border-color: green;
+}
