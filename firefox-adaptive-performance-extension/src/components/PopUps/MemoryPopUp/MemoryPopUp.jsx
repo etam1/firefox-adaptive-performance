@@ -15,7 +15,7 @@ const popUpStyle = cva(styles.popUpBase, {
     },
   },
   defaultVariants: {
-    variant: "medium",
+    variant: "low",
   },
 });
 
@@ -28,11 +28,11 @@ const popoverContentStyle = cva(styles.popoverContent, {
     },
   },
   defaultVariants: {
-    variant: "medium",
+    variant: "low",
   },
 });
 
-export default function MemoryPopUp({ variant = "medium" }) {
+export default function MemoryPopUp({ variant = "low" }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -50,18 +50,18 @@ export default function MemoryPopUp({ variant = "medium" }) {
       <Popover.Portal>
         <Popover.Content
           className={popoverContentStyle({ variant })}
-          side="center"
+          side="right"
           align="center"
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
         >
           {variant === "high" && (
             <div>
-              <p>
-                <LuInfo /> <br />
-                Memory usage: <br />
-                <span className={styles.levelHigh}>HIGH</span>
+              <p className={styles.title}>
+                <LuInfo />
+                Memory usage:
               </p>
+              <span className={styles.levelHigh}>HIGH</span>
               <ul>
                 <li>
                   <IoWarning color="#E02950" />
@@ -81,11 +81,11 @@ export default function MemoryPopUp({ variant = "medium" }) {
 
           {variant === "medium" && (
             <div>
-              <p>
-                <LuInfo /> <br />
-                Memory Usage: <br />
-                <span className={styles.levelMedium}>MEDIUM</span>
+              <p className={styles.title}>
+                <LuInfo />
+                Memory usage:
               </p>
+              <span className={styles.levelHigh}>MEDIUM</span>
               <ul>
                 <li>
                   <IoWarning color="#FFBD4F" />
@@ -101,11 +101,11 @@ export default function MemoryPopUp({ variant = "medium" }) {
 
           {variant === "low" && (
             <div>
-              <p>
-                <LuInfo /> <br />
-                Memory Usage: <br />
-                <span className={styles.levelLow}>LOW</span>
+              <p className={styles.title}>
+                <LuInfo />
+                Memory usage:
               </p>
+              <span className={styles.levelHigh}>MEDIUM</span>
               <ul>
                 <li>
                   <FaCheckCircle color="#005E5D" />

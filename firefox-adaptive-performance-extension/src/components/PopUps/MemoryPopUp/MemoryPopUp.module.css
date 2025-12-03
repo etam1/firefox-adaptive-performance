@@ -2,44 +2,24 @@
 
 .popUpBase {
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
   justify-content: center;
-  text-align: center;
-  padding: 4px 10px;
-  border-radius: 8px;
+  padding: 0;
+  background: none;
+  border-radius: 0;
   transition: background-color 0.2s ease;
+  line-height: 0;
 }
 
-.popUpHigh {
-  border: 2px solid red;
-}
-
-.popUpMedium {
-  border: 2px solid orange;
-}
-
-.popUpLow {
-  border: 2px solid green;
-}
-
-.popUpHigh:hover {
-  background: #ffe5e5;
-}
-
-.popUpMedium:hover {
-  background: #fff6dd;
-}
-
-.popUpLow:hover {
-  background: #e4ffea;
+.popUpBase svg {
+  display: block;
 }
 
 .popoverContent {
   display: flex;
-  font-family: Inter;
   flex-direction: column;
+  font-family: Inter, sans-serif;
   gap: 8px;
   font-size: 14px;
   background: #fff;
@@ -49,22 +29,47 @@
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.popoverContent h1 {
-  color: #000;
-  font-family: "Inter", sans-serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
 }
 
-.popoverContent p {
-  color: #000;
-  font-family: "Inter", sans-serif;
-  font-size: 14px;
-  font-style: normal;
+.title p {
+  margin: 0;
+  padding: 0;
   font-weight: 700;
-  line-height: 150%;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.levelHigh,
+.levelMedium,
+.levelLow {
+  display: inline-block;
+  margin: 0 0 12px 0;
+  padding: 0;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.levelHigh {
+  color: red;
+}
+
+.levelMedium {
+  color: orange;
+}
+
+.levelLow {
+  color: green;
 }
 
 .popoverContent ul {
@@ -77,35 +82,22 @@
   display: flex;
   align-items: center;
   gap: 6px;
-
+  margin-bottom: 8px;
   color: #404040;
-  font-family: "Inter", "sans-serif";
+  font-family: Inter, sans-serif;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
   line-height: normal;
 }
 
-.levelHigh {
-  color: red;
-}
-
-.levlMedium {
-  color: orange;
-}
-
-.levlLow {
-  color: green;
-}
-
 .contentHigh {
-  border-color: red;
+  border-color: #d2d2d2;
 }
 
 .contentMedium {
-  border-color: orange;
+  border-color: #d2d2d2;
 }
 
 .contentLow {
-  border-color: green;
+  border-color: #d2d2d2;
 }
