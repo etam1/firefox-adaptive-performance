@@ -8,14 +8,14 @@ export default function App() {
       usedPercent: 75,
       totalMb: 500,
       savingPercent: 23,
-      barColor: "#d64052", // red-ish
+      barColor: "#D64052", // match figma-ish
     },
     {
       label: "CPU",
       usedPercent: 15,
       totalMb: 500,
       savingPercent: 67,
-      barColor: "#185b5a", // teal-ish
+      barColor: "#185B5A",
     },
   ];
 
@@ -25,18 +25,8 @@ export default function App() {
         {resources.map((res) => (
           <ResourceCard key={res.label} {...res} />
         ))}
-
-        <div className="search-wrapper">
-          <input
-            className="search-input"
-            placeholder="Search..."
-            type="text"
-          />
-          <span className="search-icon" aria-hidden="true">
-            🔍
-          </span>
-        </div>
       </div>
     </div>
   );
 }
+

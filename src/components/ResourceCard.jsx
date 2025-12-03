@@ -14,8 +14,10 @@ export default function ResourceCard({
         <div className="resource-title">
           <span className="resource-label">{label}</span>
         </div>
-        <div className="resource-usage-text">
-          {usedPercent}% of {totalMb} MB
+
+        <div className="resource-usage">
+          <span className="resource-percent">{usedPercent}%</span>
+          <span className="resource-total">of {totalMb} MB</span>
         </div>
       </div>
 
@@ -30,3 +32,4 @@ export default function ResourceCard({
     </section>
   );
 }
+
