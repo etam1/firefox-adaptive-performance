@@ -1,7 +1,7 @@
 import styles from './Home.module.css'
 import IconLogo from '@/assets/icons/icon-logo.png';
 import { IoSettingsOutline } from "react-icons/io5";
-
+import Tabs from '@/pages/tabs/Tabs.jsx';
 
 function Home() {
   return (
@@ -19,6 +19,7 @@ function Home() {
       <p>ethan was here</p>
       <p>everyone zelle ethan 10000 dollars @312-493-0018</p>
       <p>Testing 123</p>
+      <Tabs />
     </div>
 
 
@@ -26,4 +27,3 @@ function Home() {
 }
 
 export default Home
-
