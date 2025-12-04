@@ -3,37 +3,36 @@ import { Accordion } from "radix-ui";
 import classNames from "classnames";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 // import "./styles.css";
-import './SuggestedActions.module.css'
+import './SuggestedActions.css';
+import { IoIosClose } from "react-icons/io";
+// import styles from './SuggestedActions.module.css'
 
 const AccordionDemo = () => (
 	<Accordion.Root
 		className="AccordionRoot"
 		type="single"
-		defaultValue="item-1"
+		// defaultValue="item-1"
 		collapsible
 	>
 		<Accordion.Item className="AccordionItem" value="item-1">
-			<AccordionTrigger>Is it accessible?</AccordionTrigger>
-			<AccordionContent>
-				Yes. It adheres to the WAI-ARIA design pattern.
-			</AccordionContent>
-		</Accordion.Item>
+			<AccordionTrigger>Suggested Actions</AccordionTrigger>
+			
+				<AccordionContent>
+					<p>This tab has not been used in 10 days. Close or sleep tab?</p>
+					
+					<IoIosClose size={12}/>
 
-		<Accordion.Item className="AccordionItem" value="item-2">
-			<AccordionTrigger>Is it unstyled?</AccordionTrigger>
-			<AccordionContent>
-				Yes. It's unstyled by default, giving you freedom over the look and
-				feel.
-			</AccordionContent>
-		</Accordion.Item>
+				</AccordionContent>
 
-		<Accordion.Item className="AccordionItem" value="item-3">
-			<AccordionTrigger>Can it be animated?</AccordionTrigger>
-			<Accordion.Content className="AccordionContent">
-				<div className="AccordionContentText">
-					Yes! You can animate the Accordion with CSS or JavaScript.
-				</div>
-			</Accordion.Content>
+
+				<AccordionContent className="AccordionContent2">
+					<p>These tabs have been inactive for 3 days and taking up significant CPU space.</p>
+					
+					<IoIosClose className="CloseIcon"/>
+
+				</AccordionContent>
+
+			
 		</Accordion.Item>
 	</Accordion.Root>
 );
