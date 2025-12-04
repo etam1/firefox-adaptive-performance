@@ -1,0 +1,149 @@
+@font-face {
+  font-family: "Metropolis";
+  src: url("../fonts/Metropolis-SemiBold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Figtree + Inter come from Google Fonts in index.html */
+
+/* ---------- RESET / BASE ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #f3f3f5;
+  color: #111827;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- POPUP CONTAINER ---------- */
+
+.popup {
+  width: 420px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+  padding: 24px 24px 20px;
+}
+
+/* ---------- RESOURCE CARD ---------- */
+
+.resource-card + .resource-card {
+  margin-top: 20px;
+}
+
+.resource-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.resource-title {
+  display: flex;
+  align-items: center;
+}
+
+/* "Memory" / "CPU" */
+.resource-label {
+  font-family: "Metropolis", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  line-height: normal;
+  color: #000000;
+}
+
+/* Right-side usage text: "75% of 500 MB" */
+.resource-usage {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+/* "75%", "15%" */
+.resource-percent {
+  font-family: "Figtree", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  font-style: normal;
+  line-height: normal;
+  color: #404040;
+}
+
+/* "of 500 MB" */
+.resource-total {
+  font-family: "Figtree", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  color: #808080;
+}
+
+/* ---------- PROGRESS BAR ---------- */
+
+/* More rectangular, less rounded */
+.usage-bar {
+  width: 100%;
+  height: 14px;
+  border-radius: 4px;
+  background: #f3f4f6;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.usage-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+/* ---------- FOOTER: "Saving __% of __" ---------- */
+
+.resource-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+/* small blue check circle */
+.check-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 10px;
+}
+
+/* "Saving 23% of Memory" */
+.saving-text {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: normal;
+  color: #404040;
+}
