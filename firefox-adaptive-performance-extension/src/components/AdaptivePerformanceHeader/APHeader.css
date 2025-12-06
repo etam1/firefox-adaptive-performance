@@ -1,0 +1,54 @@
+.APHeaderText {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.APHeaderTitle {
+    color: #404040;
+    font-family: Metropolis;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0;
+}
+
+.APHeaderTitlePopUp {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.APHeaderTitleBar {
+    /* display: flex;
+    flex-direction: row; */
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+    border: 2px solid black;
+    /* justify-content: space-between; */
+}
+
+.APHeaderSubtitle {
+    color: #808080;
+    font-family: Figtree;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0;
+}
+
+.APHeaderSubtitle .active {
+    color: #0161DF;
+    /* font-family: Figtree;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; */
+}
+
+.APHeaderSubtitle .status {
+    font-weight: 700;
+}

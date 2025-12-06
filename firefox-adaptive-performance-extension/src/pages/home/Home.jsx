@@ -5,9 +5,17 @@ import { IoSettingsOutline } from "react-icons/io5";
 import AccordionDemo from '../../components/SuggestedActions/SuggestedActions';
 
 import Tabs from '@/pages/tabs/Tabs.jsx';
+import APHeader from '../../components/AdaptivePerformanceHeader/APHeader';
 
 function Home() {
   return (
+    
+    <div>
+
+      <APHeader />
+
+
+    
     <div className={styles.home}>
       
       <div className={styles.topBar}>
@@ -26,6 +34,8 @@ function Home() {
 
 
       <Tabs />
+    </div>
+
     </div>
 
 
