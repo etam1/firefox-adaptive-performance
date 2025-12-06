@@ -1,5 +1,4 @@
 import "./APHeader.css"
-import MemoryPopUp from '../PopUps/MemoryPopUp/MemoryPopUp';
 import SwitchDemo from "../Switch/Switch";
 
 export default function APHeader() {
@@ -9,7 +8,7 @@ export default function APHeader() {
             <div className="APHeaderTitleBar">
                 <div className="APHeaderTitlePopUp">
                     <p className="APHeaderTitle">Adaptive Performance</p>
-                    <MemoryPopUp variant="low" />
+                    {/* <MemoryPopUp variant="low" /> */}
                 </div>
 
                 <SwitchDemo />

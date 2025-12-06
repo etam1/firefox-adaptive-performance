@@ -1,7 +1,5 @@
-ResourceCard.jsx
-
-import React from "react";
 import UsageBar from "./UsageBar.jsx";
+import "./ResourceCard.css";
 
 export default function ResourceCard({
   label,

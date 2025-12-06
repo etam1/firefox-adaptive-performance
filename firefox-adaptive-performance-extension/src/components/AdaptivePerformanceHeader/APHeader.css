@@ -1,7 +1,11 @@
+/* Importing the Figtree Font */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Golos+Text:wght@400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 .APHeaderText {
     display: flex;
     flex-direction: column;
     gap: 5px;
+   
 }
 
 .APHeaderTitle {
@@ -25,14 +29,14 @@
     flex-direction: row; */
     display: flex;
     flex-direction: row;
-    gap: 0px;
-    border: 2px solid black;
-    /* justify-content: space-between; */
+    /* gap: 0px; */
+    align-items: center;
+    justify-content: space-between;
 }
 
 .APHeaderSubtitle {
     color: #808080;
-    font-family: Figtree;
+    font-family: Figtree, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;

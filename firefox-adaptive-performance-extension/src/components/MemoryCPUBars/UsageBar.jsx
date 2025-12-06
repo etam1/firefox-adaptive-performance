@@ -1,6 +1,4 @@
-UsageBar.jsx
-
-import React from "react";
+import "./UsageBar.css";
 
 export default function UsageBar({ percent, color }) {
   return (

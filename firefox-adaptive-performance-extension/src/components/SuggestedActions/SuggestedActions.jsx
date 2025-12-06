@@ -5,9 +5,32 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 // import "./styles.css";
 import './SuggestedActions.css';
 import { IoIosClose } from "react-icons/io";
+import TabCard from "../TabCard/TabCard";
 // import styles from './SuggestedActions.module.css'
 
-const AccordionDemo = () => (
+	// Sample tab data
+  const sampleTab = {
+	id: 1,
+	title: "Google Search for Daniel Lee",
+	icon: "https://www.google.com/favicon.ico",
+	memory: "23 MB",
+	cpu: "1%",
+	lastUsed: "3 Days Ago",
+	isSleeping: false
+  };
+
+  // Handler functions
+  const handleSleep = (id) => {
+	console.log(`Sleep clicked for tab ${id}`);
+	// Add your sleep logic here
+  };
+
+  const handleClose = (id) => {
+	console.log(`Close clicked for tab ${id}`);
+	// Add your close logic here
+  };
+
+const SuggestedActions = () => (
 	<Accordion.Root
 		className="AccordionRoot"
 		type="single"
@@ -18,17 +41,48 @@ const AccordionDemo = () => (
 			<AccordionTrigger>Suggested Actions</AccordionTrigger>
 			
 				<AccordionContent>
-					<p>This tab has not been used in 10 days. Close or sleep tab?</p>
-					
-					<IoIosClose size={12}/>
+					<div className="blahblah">
+						<p className="textcustom">This tab has not been used in 10 days. Close or sleep tab?</p>
+					{/* Single TabCard Example */}
+      					<div style={{ padding: '0px', maxWidth: '400px' }}>
+        					<TabCard
+          						tab={sampleTab}
+          						sortBy="Memory Usage"
+          						onSleep={handleSleep}
+          						onClose={handleClose}
+        						/>
+      					</div>
 
+					</div>
+					
+				
 				</AccordionContent>
 
 
 				<AccordionContent className="AccordionContent2">
+					
+					<div className="blahblah">
 					<p>These tabs have been inactive for 3 days and taking up significant CPU space.</p>
 					
-					<IoIosClose className="CloseIcon"/>
+					{/* Single TabCard Example */}
+      					<div style={{ padding: '0px', maxWidth: '400px' }}>
+        					<TabCard
+          						tab={sampleTab}
+          						sortBy="Memory Usage"
+          						onSleep={handleSleep}
+          						onClose={handleClose}
+        						/>
+      					</div>
+						{/* Single TabCard Example */}
+      					<div style={{ padding: '0px', maxWidth: '400px' }}>
+        					<TabCard
+          						tab={sampleTab}
+          						sortBy="Memory Usage"
+          						onSleep={handleSleep}
+          						onClose={handleClose}
+        						/>
+      					</div>
+					</div>
 
 				</AccordionContent>
 
@@ -64,4 +118,4 @@ const AccordionContent = React.forwardRef(
 	),
 );
 
-export default AccordionDemo;
+export default SuggestedActions;

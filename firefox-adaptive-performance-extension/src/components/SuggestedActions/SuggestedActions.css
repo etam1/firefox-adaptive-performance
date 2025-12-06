@@ -60,6 +60,7 @@ h3 {
 	color: white;
 	font-size: 12px;
 	background: linear-gradient(180deg, #0161DF 0%, #9059FF 100%);
+	cursor: pointer;
 }
 
 .AccordionTrigger:hover {
@@ -103,7 +104,6 @@ h3 {
 	flex-direction: row;
 	align-items: center;
 	gap: 8px;
-	border: 2px solid black;
 }
 
 
@@ -150,4 +150,14 @@ h3 {
 	to {
 		height: 0;
 	}
+}
+
+.blahblah {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.textcustom {
+	margin:0;
 }
