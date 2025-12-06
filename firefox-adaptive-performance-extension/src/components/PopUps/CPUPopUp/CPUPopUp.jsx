@@ -1,5 +1,5 @@
 import * as Popover from "@radix-ui/react-popover";
-import styles from "./MemoryPopUp.module.css";
+import styles from "./CPUPopUp.module.css";
 import React, { useState } from "react";
 import { cva } from "class-variance-authority";
 import { LuInfo } from "react-icons/lu";
@@ -32,7 +32,7 @@ const popoverContentStyle = cva(styles.popoverContent, {
   },
 });
 
-export default function MemoryPopUp({ variant = "low" }) {
+export default function CPUPopUp({ variant = "low" }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -59,21 +59,21 @@ export default function MemoryPopUp({ variant = "low" }) {
             <div>
               <p className={styles.title}>
                 <LuInfo />
-                Memory usage:
+                CPU usage:
               </p>
               <span className={styles.levelHigh}>HIGH</span>
               <ul>
                 <li>
                   <IoWarning color="#E02950" />
-                  Slow Performance
+                  Device Overheating
+                </li>
+                <li>
+                  <IoWarning color="#E02950" />
+                  Rapid Battery Drain
                 </li>
                 <li>
                   <IoWarning color="#E02950" />
                   High Crash Risk
-                </li>
-                <li>
-                  <IoWarning color="#E02950" />
-                  Slow Reload Rate
                 </li>
               </ul>
             </div>
@@ -83,7 +83,7 @@ export default function MemoryPopUp({ variant = "low" }) {
             <div>
               <p className={styles.title}>
                 <LuInfo />
-                Memory usage:
+                CPU usage:
               </p>
               <span className={styles.levelHigh}>MEDIUM</span>
               <ul>
@@ -105,19 +105,19 @@ export default function MemoryPopUp({ variant = "low" }) {
                 <LuInfo />
                 Memory usage:
               </p>
-              <span className={styles.levelHigh}>Low</span>
+              <span className={styles.levelHigh}>LOW</span>
               <ul>
                 <li>
                   <FaCheckCircle color="#005E5D" />
-                  Smooth Performance
+                  Longer Battery Life
                 </li>
                 <li>
                   <FaCheckCircle color="#005E5D" />
-                  Improved Battery Life
+                  Faster Performance
                 </li>
                 <li>
                   <FaCheckCircle color="#005E5D" />
-                  Low Crash Risk
+                  Cooler Device
                 </li>
               </ul>
             </div>
