@@ -1,9 +1,8 @@
 import * as Popover from "@radix-ui/react-popover";
-import styles from "./MemoryPopUp.module.css";
+import styles from "./APPopUp.module.css";
 import React, { useState } from "react";
 import { cva } from "class-variance-authority";
 import { LuInfo } from "react-icons/lu";
-import { IoWarning } from "react-icons/io5";
 import { FaCheckCircle } from "react-icons/fa";
 
 const popUpStyle = cva(styles.popUpBase, {
@@ -15,7 +14,7 @@ const popUpStyle = cva(styles.popUpBase, {
     },
   },
   defaultVariants: {
-    variant: "low",
+    variant: "on",
   },
 });
 
@@ -28,11 +27,11 @@ const popoverContentStyle = cva(styles.popoverContent, {
     },
   },
   defaultVariants: {
-    variant: "low",
+    variant: "on",
   },
 });
 
-export default function MemoryPopUp({ variant = "low" }) {
+export default function CPUPopUp({ variant = "on" }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -55,69 +54,33 @@ export default function MemoryPopUp({ variant = "low" }) {
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
         >
-          {variant === "high" && (
+          {variant === "on" && (
             <div>
               <p className={styles.title}>
                 <LuInfo />
-                Memory usage:
+                Adaptive Performance:
               </p>
-              <span className={styles.levelHigh}>HIGH</span>
+              <span className={styles.level}>ON</span>
               <ul>
                 <li>
-                  <IoWarning color="#E02950" />
-                  Slow Performance
+                  <FaCheckCircle color="#0161DF" />
+                  23% Memory Saved
                 </li>
                 <li>
-                  <IoWarning color="#E02950" />
-                  High Crash Risk
+                  <FaCheckCircle color="#0161DF" />
+                  23% CPU Saved
                 </li>
                 <li>
-                  <IoWarning color="#E02950" />
-                  Slow Reload Rate
-                </li>
-              </ul>
-            </div>
-          )}
-
-          {variant === "medium" && (
-            <div>
-              <p className={styles.title}>
-                <LuInfo />
-                Memory usage:
-              </p>
-              <span className={styles.levelHigh}>MEDIUM</span>
-              <ul>
-                <li>
-                  <IoWarning color="#FFBD4F" />
-                  Reduced Efficiency
+                  <FaCheckCircle color="#0161DF" />
+                  Auto-Sleep Tabs (5 Mins)
                 </li>
                 <li>
-                  <IoWarning color="#FFBD4F" />
-                  Slow Performance
-                </li>
-              </ul>
-            </div>
-          )}
-
-          {variant === "low" && (
-            <div>
-              <p className={styles.title}>
-                <LuInfo />
-                Memory usage:
-              </p>
-              <span className={styles.levelHigh}>Low</span>
-              <ul>
-                <li>
-                  <FaCheckCircle color="#005E5D" />
-                  Smooth Performance
+                  <FaCheckCircle color="#0161DF" />
+                  Graphics Saved
                 </li>
                 <li>
-                  <FaCheckCircle color="#005E5D" />
-                  Improved Battery Life
-                </li>
-                <li>
-                  <FaCheckCircle color="#005E5D" />
-                  Low Crash Risk
+                  <FaCheckCircle color="#0161DF" />
+                  Garbage Collection
                 </li>
               </ul>
             </div>
