@@ -1,0 +1,21 @@
+.ResourceCards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Title {
+    color: #404040;
+    font-family: Metropolis;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0;
+}
+
+.TextandBars {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

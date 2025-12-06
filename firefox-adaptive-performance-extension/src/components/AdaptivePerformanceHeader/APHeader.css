@@ -1,0 +1,58 @@
+/* Importing the Figtree Font */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Golos+Text:wght@400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.APHeaderText {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+   
+}
+
+.APHeaderTitle {
+    color: #404040;
+    font-family: Metropolis;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0;
+}
+
+.APHeaderTitlePopUp {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.APHeaderTitleBar {
+    /* display: flex;
+    flex-direction: row; */
+    display: flex;
+    flex-direction: row;
+    /* gap: 0px; */
+    align-items: center;
+    justify-content: space-between;
+}
+
+.APHeaderSubtitle {
+    color: #808080;
+    font-family: Figtree, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0;
+}
+
+.APHeaderSubtitle .active {
+    color: #0161DF;
+    /* font-family: Figtree;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; */
+}
+
+.APHeaderSubtitle .status {
+    font-weight: 700;
+}

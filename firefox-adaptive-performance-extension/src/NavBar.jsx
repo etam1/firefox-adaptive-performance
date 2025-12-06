@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import styles from './NavBar.module.css'
+// import { useState } from 'react'
+// import styles from './NavBar.module.css'
 import Home from './pages/home/Home.jsx'
 import DoNotTouchHome from './pages/home/DoNotTouchHome.jsx'
 import Tabs from './pages/tabs/Tabs.jsx'
 import Settings from './pages/settings/Settings.jsx'
-import homeIcon from './assets/home.svg'
-import tabsIcon from './assets/tabs.svg'
-import settingsIcon from './assets/settings.svg'
-import logoIcon from './assets/logo.svg'
+// import homeIcon from './assets/home.svg'
+// import tabsIcon from './assets/tabs.svg'
+// import settingsIcon from './assets/settings.svg'
+// import logoIcon from './assets/logo.svg'
 
 function NavBar() {
-  const [currentPage, setCurrentPage] = useState('home')
+  // const [currentPage, setCurrentPage] = useState('home')
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <Home />
-      case 'tabs':
-        return <Tabs />
-      case 'settings':
-        return <Settings />
-      default:
-        return <Home />
-    }
-  }
+  // const renderPage = () => {
+  //   switch (currentPage) {
+  //     case 'home':
+  //       return <Home />
+  //     case 'tabs':
+  //       return <Tabs />
+  //     case 'settings':
+  //       return <Settings />
+  //     default:
+  //       return <Home />
+  //   }
+  // }
 
   return (
     <>
-      <nav className={styles.navbar}>
+      {/* <nav className={styles.navbar}>
         <img src={logoIcon} alt="Logo" className={styles.logo} />
         <div className={styles.navButtons}>
           <button 
@@ -52,9 +52,10 @@ function NavBar() {
       </nav>
 
       {/* This shows the current page - Home, Tabs, or Settings */}
-      <div className={styles.content}>
+      {/* <div className={styles.content}>
         {renderPage()}
-      </div>
+      </div> */}
+      <Home />
     </>
   )
 }

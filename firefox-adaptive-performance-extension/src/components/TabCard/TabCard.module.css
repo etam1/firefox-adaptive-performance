@@ -1,0 +1,106 @@
+/* Individual Tab Card */
+.tabCard {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 52px; 
+  display: flex;
+  padding: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 3px;
+  border: 1px solid #ECECEC;
+  background: #FAFAFA;
+  transition: box-shadow 0.2s ease;
+}
+
+.tabCard:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-color: #dcdcdc;
+}
+
+.sleeping {
+  opacity: 0.5; 
+  background-color: #f5f5f5;
+}
+
+.tabLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+  flex: 20; 
+  min-width: 0; 
+}
+
+.tabIcon {
+  width: 28px;    
+  height: 28px;   
+  min-width: 28px;
+  min-height: 28px;
+  object-fit: contain; 
+  border-radius: 50%;
+  flex-shrink: 0;  
+  display: block;    
+}
+
+.tabInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.tabTitle {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.tabMeta {
+  color: #808080;
+  font-family: Inter;
+  font-size: 10.082px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  margin-top: 2px; 
+}
+
+.divider {
+  margin: 0 6px;
+  opacity: 0.5;
+}
+
+/* Actions (Right Side) */
+.tabActions {
+  display: flex;
+  padding: 4px;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1 0 0; 
+  align-self: stretch;
+  max-width: 80px; 
+  gap: 4px;
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.actionBtn:hover {
+  background-color: #f0f0f0;
+}
