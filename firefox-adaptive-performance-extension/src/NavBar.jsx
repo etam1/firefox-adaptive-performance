@@ -1,6 +1,7 @@
 // import { useState } from 'react'
 // import styles from './NavBar.module.css'
 import Home from './pages/home/Home.jsx'
+import DoNotTouchHome from './pages/home/DoNotTouchHome.jsx'
 import Tabs from './pages/tabs/Tabs.jsx'
 import Settings from './pages/settings/Settings.jsx'
 // import homeIcon from './assets/home.svg'

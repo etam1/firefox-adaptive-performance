@@ -212,6 +212,15 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  
+  /* Limit to 2 lines with ellipsis */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  max-height: calc(1.2em * 2); /* 2 lines based on line-height */
 }
 
 .tabMeta {

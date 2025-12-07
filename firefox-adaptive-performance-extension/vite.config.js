@@ -18,7 +18,19 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: resolve(__dirname, 'popup.html'),
+        background: resolve(__dirname, 'src/background/background.js'),
       },
+      output: {
+        // Ensure dependencies are bundled properly
+        manualChunks: undefined,
+        entryFileNames: (chunkInfo) => {
+          return chunkInfo.name === 'background' ? 'background.js' : 'assets/[name]-[hash].js';
+        },
+      },
+    },
+    // Ensure all dependencies are bundled for browser extension
+    commonjsOptions: {
+      include: [/node_modules/],
     },
   },
 })

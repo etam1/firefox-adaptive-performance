@@ -1,5 +1,7 @@
 import styles from './Tabs.module.css'
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { tabsAPI } from '../../services/tabsAPI.js';
+import { getCachedData } from '../../services/cacheService.js';
 
 // --- ICONS ---
 
@@ -67,22 +69,136 @@ const EyeIcon = () => (
   </svg>
 );
 
-// --- MOCK DATA ---
-const MOCK_TABS = [
-  { id: 1, title: "Google Search for Daniel Lee", icon: "https://www.google.com/favicon.ico", memory: "23 MB", cpu: "1%", lastUsed: "3 Days Ago", isSleeping: false },
-  { id: 2, title: "Google Search for Connor Mc...", icon: "https://www.google.com/favicon.ico", memory: "45 MB", cpu: "12%", lastUsed: "1 Day Ago", isSleeping: false },
-  { id: 3, title: "Netflix", icon: "https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2016.ico", memory: "180 MB", cpu: "25%", lastUsed: "5 Mins Ago", isSleeping: false },
-  { id: 4, title: "Spotify", icon: "https://open.spotifycdn.com/cdn/images/favicon.0f31d2ea.ico", memory: "120 MB", cpu: "5%", lastUsed: "2 Hours Ago", isSleeping: false },
-  { id: 5, title: "CalCentral", icon: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Seal_of_University_of_California%2C_Berkeley.svg", memory: "120 MB", cpu: "5%", lastUsed: "2 Hours Ago", isSleeping: false },
-];
+// Helper function to format time ago
+const formatTimeAgo = (timestamp) => {
+  if (!timestamp) return "Unknown";
+  
+  const now = Date.now();
+  const diff = now - timestamp;
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes} ${minutes === 1 ? 'Min' : 'Mins'} Ago`;
+  if (hours < 24) return `${hours} ${hours === 1 ? 'Hour' : 'Hours'} Ago`;
+  if (days < 7) return `${days} ${days === 1 ? 'Day' : 'Days'} Ago`;
+  return "Long ago";
+};
+
+// Transform backend tab data to component format
+const transformTabData = (tab) => {
+  const memory = tab.resourceUsage?.memory || 0;
+  const cpu = tab.resourceUsage?.cpu || 0;
+  const isSleeping = tab.discarded || false;
+  
+  // Estimate last used time (active tabs are "now", others we estimate)
+  let lastUsedTimestamp = Date.now();
+  if (tab.active) {
+    lastUsedTimestamp = Date.now();
+  } else if (tab.discarded) {
+    // Discarded tabs haven't been used recently
+    lastUsedTimestamp = Date.now() - (24 * 60 * 60 * 1000); // 1 day ago
+  } else {
+    // Estimate based on tab state
+    lastUsedTimestamp = Date.now() - (2 * 60 * 60 * 1000); // 2 hours ago
+  }
+  
+  return {
+    id: tab.id,
+    title: tab.title || 'Untitled',
+    icon: tab.favIconUrl || '',
+    memory: `${memory} MB`,
+    memoryValue: memory, // For sorting
+    cpu: `${cpu}%`,
+    cpuValue: cpu, // For sorting
+    lastUsed: formatTimeAgo(lastUsedTimestamp),
+    lastUsedTimestamp, // For sorting
+    isSleeping,
+    active: tab.active || false,
+    pinned: tab.pinned || false,
+    url: tab.url || '',
+  };
+};
 
 const Tabs = () => {
-  const [tabs, setTabs] = useState(MOCK_TABS);
+  const [tabs, setTabs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   
   const [sortBy, setSortBy] = useState("Memory Usage");
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortMenuRef = useRef(null);
+
+  // Fetch tabs from backend
+  const fetchTabs = useCallback(async () => {
+    try {
+      setError(null);
+      
+      // Try cached data first for faster loading
+      const cached = await getCachedData();
+      
+      let enrichedTabs;
+      if (cached && cached.tabs && Object.keys(cached.tabs).length > 0) {
+        // Use cached data
+        const cachedTabs = Object.values(cached.tabs);
+        enrichedTabs = await Promise.all(
+          cachedTabs.map(async (tab) => {
+            const enriched = { ...tab };
+            
+            if (cached.resourceUsage && cached.resourceUsage[tab.id]) {
+              enriched.resourceUsage = cached.resourceUsage[tab.id];
+            } else {
+              enriched.resourceUsage = await tabsAPI.getTabResources(tab.id);
+            }
+            
+            return enriched;
+          })
+        );
+      } else {
+        // Fetch from API
+        enrichedTabs = await tabsAPI.getTabs({
+          includeResources: true,
+          allWindows: false, // Only current window
+        });
+      }
+      
+      // Transform to component format
+      const transformedTabs = enrichedTabs.map(transformTabData);
+      setTabs(transformedTabs);
+      setLoading(false);
+    } catch (err) {
+      console.error('Failed to fetch tabs:', err);
+      setError('Failed to load tabs. Make sure the extension has proper permissions.');
+      setLoading(false);
+    }
+  }, []);
+
+  // Initial fetch and polling
+  useEffect(() => {
+    let isMounted = true;
+    
+    const loadData = async () => {
+      if (isMounted) {
+        await fetchTabs();
+      }
+    };
+    
+    loadData();
+    
+    // Poll every 3 seconds for real-time updates
+    const interval = setInterval(() => {
+      if (isMounted) {
+        fetchTabs();
+      }
+    }, 3000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [fetchTabs]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -102,31 +218,55 @@ const Tabs = () => {
 
     return filtered.sort((a, b) => {
       if (sortBy === "Memory Usage") {
-        return parseInt(b.memory) - parseInt(a.memory);
+        return (b.memoryValue || 0) - (a.memoryValue || 0);
       } else if (sortBy === "CPU Usage") {
-        return parseInt(b.cpu || "0") - parseInt(a.cpu || "0");
+        return (b.cpuValue || 0) - (a.cpuValue || 0);
       } else if (sortBy === "Last Used") {
-        const getValue = (str) => {
-          if (!str) return 0;
-          if (str.includes("Mins")) return 1;
-          if (str.includes("Hours")) return 2;
-          if (str.includes("Day")) return 3;
-          return 4;
-        };
-        return getValue(a.lastUsed) - getValue(b.lastUsed);
+        // Sort by timestamp (most recent first)
+        return (b.lastUsedTimestamp || 0) - (a.lastUsedTimestamp || 0);
       }
       return 0;
     });
   };
 
-  const handleSleep = (id) => {
-    setTabs(prev => prev.map(tab => 
-      tab.id === id ? { ...tab, isSleeping: !tab.isSleeping } : tab
-    ));
+  const handleSleep = async (id) => {
+    try {
+      const tab = tabs.find(t => t.id === id);
+      if (!tab) return;
+      
+      if (tab.isSleeping) {
+        // Wake up: activate the tab (this will reload it)
+        await browser.tabs.update(id, { active: true });
+      } else {
+        // Sleep: discard the tab
+        await tabsAPI.optimizeTab(id, { action: 'sleep' });
+      }
+      
+      // Refresh tabs after action
+      setTimeout(() => {
+        fetchTabs();
+      }, 500);
+    } catch (err) {
+      console.error('Failed to sleep/wake tab:', err);
+      alert('Failed to sleep/wake tab. It may be protected.');
+    }
   };
 
-  const handleClose = (id) => {
-    setTabs(prev => prev.filter(tab => tab.id !== id));
+  const handleClose = async (id) => {
+    try {
+      await tabsAPI.optimizeTab(id, { action: 'close' });
+      
+      // Remove from local state immediately for better UX
+      setTabs(prev => prev.filter(tab => tab.id !== id));
+      
+      // Refresh to sync with actual state
+      setTimeout(() => {
+        fetchTabs();
+      }, 300);
+    } catch (err) {
+      console.error('Failed to close tab:', err);
+      alert('Failed to close tab. It may be protected.');
+    }
   };
 
   const handleSortSelect = (option) => {
@@ -183,38 +323,85 @@ const Tabs = () => {
         </div>
       </div>
 
+      {/* Loading State */}
+      {loading && (
+        <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+          Loading tabs...
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div style={{ padding: '20px', textAlign: 'center', color: '#d32f2f', backgroundColor: '#ffebee', borderRadius: '4px', margin: '10px' }}>
+          {error}
+        </div>
+      )}
+
       {/* Tab List */}
-      <div className={styles.tabList}>
-        {sortedTabs.map((tab) => (
-          <div key={tab.id} className={`${styles.tabCard} ${tab.isSleeping ? styles.sleeping : ''}`}>
-            
-            <div className={styles.tabLeft}>
-              <img src={tab.icon} alt="icon" className={styles.tabIcon} />
-              <div className={styles.tabInfo}>
-                <div className={styles.tabTitle}>{tab.title}</div>
-                <div className={styles.tabMeta}>
-                  {sortBy === "CPU Usage" ? (
-                     <span className={styles.memory}>{tab.cpu || "0%"} CPU</span>
+      {!loading && !error && (
+        <div className={styles.tabList}>
+          {sortedTabs.length === 0 ? (
+            <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+              No tabs found
+            </div>
+          ) : (
+            sortedTabs.map((tab) => (
+              <div key={tab.id} className={`${styles.tabCard} ${tab.isSleeping ? styles.sleeping : ''} ${tab.active ? styles.active : ''}`}>
+                
+                <div className={styles.tabLeft}>
+                  {tab.icon ? (
+                    <img 
+                      src={tab.icon} 
+                      alt="icon" 
+                      className={styles.tabIcon}
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
                   ) : (
-                     <span className={styles.memory}>{tab.memory}</span>
+                    <div className={styles.tabIcon} style={{ backgroundColor: '#ddd', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px' }}>
+                      {tab.title.charAt(0).toUpperCase()}
+                    </div>
                   )}
-                  <span className={styles.divider}>|</span>
-                  <span>Last Used: {tab.lastUsed}</span>
+                  <div className={styles.tabInfo}>
+                    <div className={styles.tabTitle}>
+                      {tab.title}
+                      {tab.pinned && <span style={{ marginLeft: '8px', fontSize: '10px', color: '#ff9800' }}>📌</span>}
+                      {tab.active && <span style={{ marginLeft: '8px', fontSize: '10px', color: '#4caf50' }}>●</span>}
+                    </div>
+                    <div className={styles.tabMeta}>
+                      {sortBy === "CPU Usage" ? (
+                         <span className={styles.memory}>{tab.cpu || "0%"} CPU</span>
+                      ) : (
+                         <span className={styles.memory}>{tab.memory}</span>
+                      )}
+                      <span className={styles.divider}>|</span>
+                      <span>Last Used: {tab.lastUsed}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.tabActions}>
+                  <button 
+                    onClick={() => handleSleep(tab.id)} 
+                    className={styles.actionBtn} 
+                    title={tab.isSleeping ? "Wake Up" : "Sleep"}
+                    disabled={tab.pinned || tab.active}
+                  >
+                    {tab.isSleeping ? <EyeIcon filled={true} /> : <MoonIcon />}
+                  </button>
+                  <button 
+                    onClick={() => handleClose(tab.id)} 
+                    className={styles.actionBtn}
+                    title="Close Tab"
+                    disabled={tab.pinned}
+                  >
+                    <CloseIcon />
+                  </button>
                 </div>
               </div>
-            </div>
-
-            <div className={styles.tabActions}>
-              <button onClick={() => handleSleep(tab.id)} className={styles.actionBtn} title={tab.isSleeping ? "Wake Up" : "Sleep"}>
-                {tab.isSleeping ? <EyeIcon filled={true} /> : <MoonIcon />}
-              </button>
-              <button onClick={() => handleClose(tab.id)} className={styles.actionBtn}>
-                <CloseIcon />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };
