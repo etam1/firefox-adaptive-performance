@@ -1,7 +1,7 @@
 import "./APHeader.css"
 import SwitchDemo from "../Switch/Switch";
 
-export default function APHeader() {
+export default function APHeader({ showSuggestedActions, setShowSuggestedActions }) {
     return (
         <div className="APHeaderText">
             
@@ -11,7 +11,9 @@ export default function APHeader() {
                     {/* <MemoryPopUp variant="low" /> */}
                 </div>
 
-                <SwitchDemo />
+                <SwitchDemo
+                checked={showSuggestedActions}
+                onCheckedChange={setShowSuggestedActions} />
             </div>
             
 

@@ -11,10 +11,12 @@ import SettingsIcon from '../../assets/VectorIcons/SettingsIcon/SettingsIcon';
 import CloseIcon from '../../assets/VectorIcons/CloseIcon/CloseIcon';
 import TabCard from '../../components/TabCard/TabCard';
 
+import { useState } from 'react';  // ← ADD THIS IMPORT
+
 
 function Home() {
 
-
+  const [showSuggestedActions, setShowSuggestedActions] = useState(false);  // false = DO NOT show by default
 
   return (
         
@@ -35,13 +37,21 @@ function Home() {
   <div className="HeaderandSuggested">
     {/* This is the title of the section */}
       <div className="APHeader">
-        <APHeader />
+        <APHeader 
+            showSuggestedActions={showSuggestedActions}
+            setShowSuggestedActions={setShowSuggestedActions}/>
       </div>
 
-    {/* This is the suggested actions       */}
+    {/* This is the suggested actions      
       <div className="SuggestedActions">
         <SuggestedActions />
-      </div>
+      </div> */}
+      {/* Only show if switch is ON */}
+  {showSuggestedActions && (
+    <div className="SuggestedActions">
+      <SuggestedActions />
+    </div>
+  )}
 
       <div>
       </div>
