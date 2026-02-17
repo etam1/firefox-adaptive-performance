@@ -4,7 +4,7 @@ import SwitchDemo from "../Switch/Switch";
 export default function APHeader({ showSuggestedActions, setShowSuggestedActions }) {
     return (
         <div className="APHeaderText">
-            
+
             <div className="APHeaderTitleBar">
                 <div className="APHeaderTitlePopUp">
                     <p className="APHeaderTitle">Adaptive Performance</p>
@@ -12,16 +12,16 @@ export default function APHeader({ showSuggestedActions, setShowSuggestedActions
                 </div>
 
                 <SwitchDemo
-                checked={showSuggestedActions}
-                onCheckedChange={setShowSuggestedActions} />
+                    checked={showSuggestedActions}
+                    onCheckedChange={setShowSuggestedActions} />
             </div>
-            
 
-            <p className="APHeaderSubtitle">                
-                <span className="status">Status:</span>  
+
+            <p className="APHeaderSubtitle">
+                <span className="status">Status:</span>
                 <span className="active"> Active</span>
-                , 
-                Sleeping Tabs, 
+                ,
+                Sleeping Tabs,
                 Lowering FPS</p>
 
         </div>
