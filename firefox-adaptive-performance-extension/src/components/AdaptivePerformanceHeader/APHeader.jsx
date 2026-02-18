@@ -1,5 +1,6 @@
 import "./APHeader.css"
 import SwitchDemo from "../Switch/Switch";
+import APPopUp from "../PopUps/APPopUp/APPopUp";
 
 export default function APHeader({ showSuggestedActions, setShowSuggestedActions }) {
     return (
@@ -8,7 +9,7 @@ export default function APHeader({ showSuggestedActions, setShowSuggestedActions
             <div className="APHeaderTitleBar">
                 <div className="APHeaderTitlePopUp">
                     <p className="APHeaderTitle">Adaptive Performance</p>
-                    {/* <MemoryPopUp variant="low" /> */}
+                    <APPopUp variant="on" />
                 </div>
 
                 <SwitchDemo
@@ -17,12 +18,14 @@ export default function APHeader({ showSuggestedActions, setShowSuggestedActions
             </div>
 
 
-            <p className="APHeaderSubtitle">
-                <span className="status">Status:</span>
-                <span className="active"> Active</span>
-                ,
-                Sleeping Tabs,
-                Lowering FPS</p>
+            {showSuggestedActions && (
+                <p className="APHeaderSubtitle">
+                    <span className="status">Status:</span>
+                    <span className="active"> Active</span>
+                    ,
+                    Sleeping Tabs,
+                    Lowering FPS</p>
+            )}
 
         </div>
     )

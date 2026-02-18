@@ -19,14 +19,14 @@ function Home() {
   const [showSuggestedActions, setShowSuggestedActions] = useState(false);  // false = DO NOT show by default
 
   return (
-        
+
     <div className="home">
 
-{/* This is the top bar */}
+      {/* This is the top bar */}
       <div className="topBar">
         {/* <img src={IconLogo} width={24} height={24} alt='Logo' /> */}
-        <LogoVector size={24}/>
-        
+        <LogoVector size={24} />
+
         <div className="topBarRight">
           <SettingsIcon />
           <CloseIcon />
@@ -34,39 +34,39 @@ function Home() {
       </div>
 
 
-  <div className="HeaderandSuggested">
-    {/* This is the title of the section */}
-      <div className="APHeader">
-        <APHeader 
+      <div className="HeaderandSuggested">
+        {/* This is the title of the section */}
+        <div className="APHeader">
+          <APHeader
             showSuggestedActions={showSuggestedActions}
-            setShowSuggestedActions={setShowSuggestedActions}/>
-      </div>
+            setShowSuggestedActions={setShowSuggestedActions} />
+        </div>
 
-    {/* This is the suggested actions      
+        {/* This is the suggested actions      
       <div className="SuggestedActions">
         <SuggestedActions />
       </div> */}
-      {/* Only show if switch is ON */}
-  {showSuggestedActions && (
-    <div className="SuggestedActions">
-      <SuggestedActions />
-    </div>
-  )}
+        {/* Only show if switch is ON */}
+        {showSuggestedActions && (
+          <div className="SuggestedActions">
+            <SuggestedActions />
+          </div>
+        )}
 
-      <div>
+        <div>
+        </div>
+
       </div>
 
-  </div>
+
+      {/* This is browser usage */}
+      <div className="MemoryandTabs">
+        <CPUMemoryBars showSuggestedActions={showSuggestedActions} />
+
+        <Tabs />
+      </div>
 
 
-{/* This is browser usage */}
-    <div className="MemoryandTabs">
-      <CPUMemoryBars />
-
-      <Tabs />
-    </div>
-
-    
 
     </div>
 

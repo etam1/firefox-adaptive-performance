@@ -57,11 +57,11 @@ export default function CPUPopUp({ variant = "low" }) {
         >
           {variant === "high" && (
             <div>
-              <p className={styles.title}>
+              <div className={styles.title}>
                 <LuInfo />
-                CPU usage:
-              </p>
-              <span className={styles.levelHigh}>HIGH</span>
+                <span>CPU usage:</span>
+                <span className={styles.levelHigh}>HIGH</span>
+              </div>
               <ul>
                 <li>
                   <IoWarning color="#E02950" />
@@ -81,11 +81,11 @@ export default function CPUPopUp({ variant = "low" }) {
 
           {variant === "medium" && (
             <div>
-              <p className={styles.title}>
+              <div className={styles.title}>
                 <LuInfo />
-                CPU usage:
-              </p>
-              <span className={styles.levelHigh}>MEDIUM</span>
+                <span>CPU usage:</span>
+                <span className={styles.levelMedium}>MEDIUM</span>
+              </div>
               <ul>
                 <li>
                   <IoWarning color="#FFBD4F" />
@@ -101,11 +101,11 @@ export default function CPUPopUp({ variant = "low" }) {
 
           {variant === "low" && (
             <div>
-              <p className={styles.title}>
+              <div className={styles.title}>
                 <LuInfo />
-                Memory usage:
-              </p>
-              <span className={styles.levelHigh}>LOW</span>
+                <span>CPU usage:</span>
+                <span className={styles.levelText}>LOW</span>
+              </div>
               <ul>
                 <li>
                   <FaCheckCircle color="#005E5D" />

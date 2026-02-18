@@ -31,7 +31,7 @@ const popoverContentStyle = cva(styles.popoverContent, {
   },
 });
 
-export default function CPUPopUp({ variant = "on" }) {
+export default function APPopUp({ variant = "on" }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -51,16 +51,18 @@ export default function CPUPopUp({ variant = "on" }) {
           className={popoverContentStyle({ variant })}
           side="right"
           align="center"
+          sideOffset={16}
+          alignOffset={-8}
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
         >
           {variant === "on" && (
             <div>
-              <p className={styles.title}>
+              <div className={styles.title}>
                 <LuInfo />
-                Adaptive Performance:
-              </p>
-              <span className={styles.level}>ON</span>
+                <span>Adaptive Performance:</span>
+                <span className={styles.level}>ON</span>
+              </div>
               <ul>
                 <li>
                   <FaCheckCircle color="#0161DF" />
