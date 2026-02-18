@@ -6,6 +6,8 @@
 import { getResourceUsage } from '../services/resourceUsageService.js';
 import { computeTabScore } from '../services/scoringService.js';
 import { getOptimizationSuggestions } from '../services/optimizationService.js';
+import { initializeNetworkTracking } from '../services/networkTrackingService.js';
+import { initializePerformanceDataCollection } from '../services/performanceDataService.js';
 
 // Cache for tab data (speeds up frontend loading)
 const tabDataCache = {
@@ -230,8 +232,12 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return false;
 });
 
+// Initialize measurement systems
+initializeNetworkTracking();
+initializePerformanceDataCollection();
+
 // Start the background polling when script loads
 startPolling();
 
-console.log('Background script initialized');
+console.log('Background script initialized with real measurement capabilities');
 

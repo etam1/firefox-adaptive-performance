@@ -1,5 +1,14 @@
 import UsageBar from "./UsageBar.jsx";
 import "./ResourceCard.css";
+import CPUPopUp from "../PopUps/CPUPopUp/CPUPopUp";
+import MemoryPopUp from "../PopUps/MemoryPopUp/MemoryPopUp";
+
+// Helper function to determine variant based on usage percentage
+function getVariant(percent) {
+  if (percent >= 75) return "high";
+  if (percent >= 50) return "medium";
+  return "low";
+}
 
 export default function ResourceCard({
   label,
@@ -7,12 +16,17 @@ export default function ResourceCard({
   totalMb,
   savingPercent,
   barColor,
+  showSuggestedActions = false,
 }) {
+  const variant = getVariant(usedPercent);
+
   return (
     <section className="resource-card">
       <div className="resource-header">
         <div className="resource-title">
           <span className="resource-label">{label}</span>
+          {label === "CPU" && <CPUPopUp variant={variant} />}
+          {label === "Memory" && <MemoryPopUp variant={variant} />}
         </div>
 
         <div className="resource-usage">
@@ -23,12 +37,14 @@ export default function ResourceCard({
 
       <UsageBar percent={usedPercent} color={barColor} />
 
-      <div className="resource-footer">
-        <span className="check-circle">✓</span>
-        <span className="saving-text">
-          Saving {savingPercent}% of {label}
-        </span>
-      </div>
+      {showSuggestedActions && (
+        <div className="resource-footer">
+          <span className="check-circle">✓</span>
+          <span className="saving-text">
+            Saving {savingPercent}% of {label}
+          </span>
+        </div>
+      )}
     </section>
   );
 }

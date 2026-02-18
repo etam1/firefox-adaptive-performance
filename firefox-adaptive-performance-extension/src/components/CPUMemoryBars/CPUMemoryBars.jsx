@@ -4,7 +4,7 @@ import ResourceCard from "../MemoryCPUBars/ResourceCard";
 import { tabsAPI } from "../../services/tabsAPI.js";
 import { getCachedData } from "../../services/cacheService.js";
 
-export default function CPUMemoryBars() {
+export default function CPUMemoryBars({ showSuggestedActions = false }) {
     const [tabsData, setTabsData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,10 +13,10 @@ export default function CPUMemoryBars() {
     const fetchTabsData = useCallback(async () => {
         try {
             setError(null);
-            
+
             // Try cached data first for faster loading
             const cached = await getCachedData();
-            
+
             let enrichedTabs;
             if (cached && cached.tabs && Object.keys(cached.tabs).length > 0) {
                 // Use cached data
@@ -24,13 +24,13 @@ export default function CPUMemoryBars() {
                 enrichedTabs = await Promise.all(
                     cachedTabs.map(async (tab) => {
                         const enriched = { ...tab };
-                        
+
                         if (cached.resourceUsage && cached.resourceUsage[tab.id]) {
                             enriched.resourceUsage = cached.resourceUsage[tab.id];
                         } else {
                             enriched.resourceUsage = await tabsAPI.getTabResources(tab.id);
                         }
-                        
+
                         return enriched;
                     })
                 );
@@ -41,7 +41,7 @@ export default function CPUMemoryBars() {
                     allWindows: false, // Only current window
                 });
             }
-            
+
             setTabsData(enrichedTabs);
             setLoading(false);
         } catch (err) {
@@ -54,15 +54,15 @@ export default function CPUMemoryBars() {
     // Initial fetch and polling
     useEffect(() => {
         let isMounted = true;
-        
+
         const loadData = async () => {
             if (isMounted) {
                 await fetchTabsData();
             }
         };
-        
+
         loadData();
-        
+
         // Poll every 3 seconds for real-time updates
         const interval = setInterval(() => {
             if (isMounted) {
@@ -128,13 +128,13 @@ export default function CPUMemoryBars() {
         // Estimate total available memory (we'll use a reasonable default)
         // In a real scenario, you might get this from system APIs
         const estimatedTotalMB = 8000; // 8GB default, adjust as needed
-        
+
         const usedMB = resourceStats.totalMemory;
         const usedPercent = Math.min(100, Math.round((usedMB / estimatedTotalMB) * 100));
-        
+
         // Calculate potential savings from sleeping tabs
         // Savings = what we could save if we put more tabs to sleep
-        const potentialSavings = resourceStats.activeMemory > 0 
+        const potentialSavings = resourceStats.activeMemory > 0
             ? Math.round((resourceStats.sleepingMemory / resourceStats.totalMemory) * 100)
             : 0;
 
@@ -148,10 +148,10 @@ export default function CPUMemoryBars() {
     const cpuStats = useMemo(() => {
         // CPU is already a percentage, but we'll normalize it
         const usedPercent = Math.min(100, Math.round(resourceStats.totalCPU));
-        
+
         // For CPU, we use 100% as the "total" (since CPU is already a percentage)
         const totalMb = 100; // This is just for display, CPU doesn't have MB
-        
+
         // Calculate potential savings
         const potentialSavings = resourceStats.totalCPU > 0
             ? Math.round((resourceStats.sleepingCPU / resourceStats.totalCPU) * 100)
@@ -196,19 +196,21 @@ export default function CPUMemoryBars() {
             <p className="Title">Browser Usage</p>
 
             <div className="ResourceCards">
-                <ResourceCard 
-                    label="Memory" 
-                    usedPercent={memoryStats.usedPercent} 
-                    totalMb={memoryStats.totalMb} 
-                    savingPercent={memoryStats.savingPercent} 
-                    barColor="#E02950" 
+                <ResourceCard
+                    label="Memory"
+                    usedPercent={memoryStats.usedPercent}
+                    totalMb={memoryStats.totalMb}
+                    savingPercent={memoryStats.savingPercent}
+                    barColor="#E02950"
+                    showSuggestedActions={showSuggestedActions}
                 />
-                <ResourceCard 
-                    label="CPU" 
-                    usedPercent={cpuStats.usedPercent} 
-                    totalMb={cpuStats.totalMb} 
-                    savingPercent={cpuStats.savingPercent} 
-                    barColor="#005E5D" 
+                <ResourceCard
+                    label="CPU"
+                    usedPercent={cpuStats.usedPercent}
+                    totalMb={cpuStats.totalMb}
+                    savingPercent={cpuStats.savingPercent}
+                    barColor="#005E5D"
+                    showSuggestedActions={showSuggestedActions}
                 />
             </div>
         </div>

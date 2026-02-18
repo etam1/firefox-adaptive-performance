@@ -1,15 +1,17 @@
 /**
  * Service for retrieving resource usage metrics for browser tabs
- * Note: Firefox WebExtensions API has limited performance APIs,
- * so we use available tab properties and intelligent estimation
+ * Uses real measurements where available (network, JS execution time, timers)
+ * Falls back to estimates for CPU and memory (not directly measurable in Firefox)
  */
 
 import { getTabById } from './tabsService.js';
+import { getNetworkUsage } from './networkTrackingService.js';
+import { getPerformanceData } from './performanceDataService.js';
 
 /**
  * Get resource usage for a specific tab
  * @param {number} tabId - The ID of the tab
- * @returns {Promise<Object>} Resource usage object with memory, CPU, network, storage
+ * @returns {Promise<Object>} Resource usage object with memory, CPU, network, storage, performance
  */
 export async function getResourceUsage(tabId) {
   try {
@@ -19,13 +21,74 @@ export async function getResourceUsage(tabId) {
       throw new Error(`Tab with ID ${tabId} not found`);
     }
 
-    // Base resource estimates based on tab state
+    // Get real network measurements
+    let networkUsage;
+    try {
+      networkUsage = getNetworkUsage(tabId);
+    } catch (error) {
+      console.warn(`Could not get network usage for tab ${tabId}, using estimate:`, error);
+      networkUsage = calculateNetworkUsage(tab);
+    }
+
+    // Get real performance data (JS execution time, memory if available, timers)
+    let performanceData;
+    try {
+      performanceData = getPerformanceData(tabId);
+    } catch (error) {
+      console.warn(`Could not get performance data for tab ${tabId}:`, error);
+      performanceData = null;
+    }
+
+    // Calculate memory (use real data if available, otherwise estimate)
+    let memoryMB;
+    if (performanceData && performanceData.memoryUsed > 0) {
+      // Convert bytes to MB
+      memoryMB = Math.round(performanceData.memoryUsed / (1024 * 1024));
+    } else {
+      // Fall back to estimation
+      memoryMB = calculateMemoryUsage(tab);
+    }
+
+    // CPU cannot be directly measured in Firefox, so we estimate
+    // But we can use performance data to improve the estimate
+    const cpuPercent = calculateCPUUsage(tab, performanceData);
+
+    // Build resource usage object
     const resourceUsage = {
-      memory: calculateMemoryUsage(tab),
-      cpu: calculateCPUUsage(tab),
-      network: calculateNetworkUsage(tab),
+      memory: memoryMB,
+      cpu: cpuPercent,
+      network: {
+        bytesIn: networkUsage.bytesIn || 0,
+        bytesOut: networkUsage.bytesOut || 0,
+        bytesInPerSecond: networkUsage.bytesInPerSecond || 0,
+        bytesOutPerSecond: networkUsage.bytesOutPerSecond || 0,
+        requestsPerSecond: networkUsage.requestsPerSecond || 0,
+        totalRequests: networkUsage.totalRequests || 0,
+        isMeasured: true, // Network is now measured
+      },
       storage: calculateStorageUsage(tab),
+      performance: performanceData ? {
+        jsExecutionTime: performanceData.jsExecutionTime || 0,
+        totalExecutionTime: performanceData.totalExecutionTime || 0,
+        scriptTime: performanceData.scriptTime || 0,
+        paintTime: performanceData.paintTime || 0,
+        layoutTime: performanceData.layoutTime || 0,
+        activeIntervals: performanceData.activeIntervals || 0,
+        activeTimeouts: performanceData.activeTimeouts || 0,
+        totalIntervalsCreated: performanceData.totalIntervalsCreated || 0,
+        totalTimeoutsCreated: performanceData.totalTimeoutsCreated || 0,
+        averageIntervalDelay: performanceData.averageIntervalDelay || 0,
+        averageTimeoutDelay: performanceData.averageTimeoutDelay || 0,
+        hasData: performanceData.hasData || false,
+      } : null,
       timestamp: Date.now(),
+      // Metadata about what's measured vs estimated
+      metadata: {
+        memoryMeasured: !!(performanceData && performanceData.memoryUsed > 0),
+        cpuMeasured: false, // CPU cannot be measured in Firefox
+        networkMeasured: true, // Network is now measured
+        performanceMeasured: !!(performanceData && performanceData.hasData),
+      },
     };
 
     return resourceUsage;
@@ -80,14 +143,34 @@ function calculateMemoryUsage(tab) {
 
 /**
  * Calculate estimated CPU usage percentage
- * Based on tab activity and state
+ * Based on tab activity and state, enhanced with performance data if available
+ * @param {Object} tab - Tab object
+ * @param {Object} performanceData - Performance data from content scripts (optional)
  */
-function calculateCPUUsage(tab) {
+function calculateCPUUsage(tab, performanceData = null) {
   let cpuPercent = 0;
 
   // Discarded tabs use no CPU
   if (tab.discarded) {
     return 0;
+  }
+
+  // Use performance data to improve CPU estimate
+  if (performanceData) {
+    // Active intervals/timeouts indicate background activity
+    const activeTimers = (performanceData.activeIntervals || 0) + (performanceData.activeTimeouts || 0);
+    if (activeTimers > 10) {
+      cpuPercent += Math.min(15, activeTimers * 0.5); // Up to 15% for high timer activity
+    } else if (activeTimers > 5) {
+      cpuPercent += 5;
+    }
+
+    // High script execution time suggests CPU usage
+    if (performanceData.scriptTime > 1000) {
+      cpuPercent += 10; // High script time = more CPU
+    } else if (performanceData.scriptTime > 500) {
+      cpuPercent += 5;
+    }
   }
 
   // Active tab uses more CPU
@@ -112,14 +195,14 @@ function calculateCPUUsage(tab) {
     cpuPercent *= 0.5;
   }
 
-  // Add variance
-  const variance = 0.7 + Math.random() * 0.6; // ±30% variance
+  // Add variance (less variance if we have performance data)
+  const variance = performanceData ? 0.85 + Math.random() * 0.3 : 0.7 + Math.random() * 0.6;
   
   return Math.min(100, Math.round(cpuPercent * variance * 10) / 10);
 }
 
 /**
- * Calculate estimated network usage
+ * Calculate estimated network usage (fallback when real measurement unavailable)
  * Based on tab state and activity
  */
 function calculateNetworkUsage(tab) {
@@ -127,7 +210,10 @@ function calculateNetworkUsage(tab) {
     return {
       bytesIn: 0,
       bytesOut: 0,
+      bytesInPerSecond: 0,
+      bytesOutPerSecond: 0,
       requestsPerSecond: 0,
+      totalRequests: 0,
     };
   }
 
@@ -152,7 +238,10 @@ function calculateNetworkUsage(tab) {
   return {
     bytesIn: Math.round(bytesIn * variance),
     bytesOut: Math.round(bytesIn * 0.1 * variance), // Outbound is typically 10% of inbound
+    bytesInPerSecond: 0,
+    bytesOutPerSecond: 0,
     requestsPerSecond: Math.round(requestsPerSecond * variance * 10) / 10,
+    totalRequests: 0,
   };
 }
 

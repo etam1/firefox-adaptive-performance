@@ -11,9 +11,25 @@
     "scripts": ["background.js"],
     "persistent": true
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-scripts/performance-monitor.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-scripts/timer-tracker.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
   "permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "webRequest",
+    "<all_urls>"
   ]
 }
 
